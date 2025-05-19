@@ -1,0 +1,38 @@
+# WeatherWise: What's This Project All About?
+
+## The Big Picture
+Weather Wise is a Python-based application that provides real-time weather information and activity recommendations based on current conditions in a specific location. This project aims to serve as a smart assistant to help users make informed daily decisions, especially when planning outdoor activities.
+
+## What I Created
+This project has two main parts:
+1. **Weather Information Display**
+- Presents weather data in a clean and structured visual format with emojis for better readability.
+- Retrieves current weather conditions and forecasts for the next two days (tomorrow & the day after).
+- Allows users to check weather conditions in any location (dynamic location selection).
+- Displays rain probability to help users plan accordingly.
+2. **Conversation Feature**
+- Implements Natural Language Processing (NLP) to provide users with activity suggestions based on current and upcoming weather conditions (tomorrow, after tomorrow)
+- Enables users to change locations within the application easily.
+- Generates relevant, informative, and naturally structured responses, simulating a conversation with a smart assistant.
+
+## How I Build It
+You'll:
+- Python programming for real-time weather data retrieval using API services.
+- Designing an intuitive menu navigation system for ease of use.
+- Creating weather visualisations using ASCII text format for forecast representation.
+- Parsing JSON weather data into structured, user-friendly information displays.
+- Enhancing weather visualisation with emoji indicators for better readability.
+- Implementing NLP processing to provide activity recommendations based on weather forecasts.
+- Developing functionality to allow location changes within the program.
+- Designing rain probability visualisations based on forecast percentages.
+
+## Learning Value
+- Creating pseudocode as a foundational step in system design.
+- Writing structured code that is easy to understand and modify.
+- Designing a user-friendly and efficient interface.
+- Developing an online, real-time weather system.
+- Converting parsed JSON data into granular and informative weather reports.
+- Building clear and relevant data visualisations for better user engagement.
+- Using AI-powered tools effectively to solve programming challenges.
+- Documenting the workflow systematically.
+- Leveraging GitHub for version control to monitor code revisions during development.
