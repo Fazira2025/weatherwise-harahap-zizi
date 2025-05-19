@@ -1,0 +1,477 @@
+Conversation = COPILOT AI
+
+Day 1 - 14/05/2025
+
+***Conversation about detecting users activity for parse_weather_question***
+
+1.	Me: Hey. Can you help me find the word "Activities" from user input in Python?
+Copilot AI said:
+Certainly! If you want to search for the word "Activities" in a text input by the user in Python, you can use built-in string search methods. Here are a couple of ways you can do it:
+1.	Using in to check if the word exists:
+text = input("Enter text: ")  # User input
+
+if "activities" in text.lower():  # .lower() makes the search case-insensitive
+    print("The word 'activities' was found in the text!")
+else:
+    print("The word 'activities' was not found.")
+2.	Using Regular Expressions (re):
+If you want a more flexible search (e.g., to match related forms like "activity", "activities", or "doing activities"), you can use re.search():
+import re
+
+text = input("Enter text: ")
+pattern = r"\bactivities\b"  # \b ensures it matches the exact word
+
+if re.search(pattern, text, re.IGNORECASE):  # Case-insensitive search
+    print("The word 'activities' was found in the text!")
+else:
+    print("The word 'activities' was not found.")
+
+2.	Me: I have this code. How can I detect the activity that the user inputs?
+def parse_weather_question(question, location_from_input):
+    # Define a regex pattern to detect time
+    time_pattern = r"(today|tomorrow|after-tomorrow)"
+
+    # Search for time in the question
+    time_match = re.search(time_pattern, question, re.IGNORECASE)
+
+    # Default time is "today" if not found
+    time = "today"
+
+    if time_match:
+        time = time_match.group(1).lower()  # Get time value (today, tomorrow, after-tomorrow)
+
+    # Determine the date based on the time mentioned
+    target_date = datetime.now()
+
+    if time == "tomorrow":
+        target_date += timedelta(days=1)
+    elif time == "after-tomorrow":
+        target_date += timedelta(days=2)
+
+    # Use the location provided earlier
+    location = location_from_input
+
+    # Display extracted information
+    print(f"Location: {location}")
+    print(f"Time: {time.capitalize()}")
+    print(f"Target Date: {target_date.strftime('%A, %d %B %Y')}")
+
+    # Call the function to show weather based on location and date
+    if location:
+        create_temperature_visualisation(location)
+    else:
+        print("Please provide a valid location.")
+Copilot AI said:
+Your current code focuses on reading time from the user's input question.
+If you want to also detect activity words from user input, you can add an extra regex pattern for activity detection.
+
+✅ Here's how to add activity detection to your function:
+import re
+from datetime import datetime, timedelta
+
+def parse_weather_question(question, location_from_input):
+    # Regex pattern to detect time
+    time_pattern = r"(today|tomorrow|after-tomorrow)"
+    # Regex pattern to detect activity
+    activity_pattern = r"\b(activity|exercise|running|cycling|swimming|walking)\b"
+
+    # Search for time
+    time_match = re.search(time_pattern, question, re.IGNORECASE)
+    time = "today"  # Default
+
+    if time_match:
+        time = time_match.group(1).lower()
+
+    # Determine target date
+    target_date = datetime.now()
+
+    if time == "tomorrow":
+        target_date += timedelta(days=1)
+    elif time == "after-tomorrow":
+        target_date += timedelta(days=2)
+
+    # Search for activity
+    activity_match = re.search(activity_pattern, question, re.IGNORECASE)
+    activity = activity_match.group(1).capitalize() if activity_match else "Unknown"
+
+    # Use the location provided
+    location = location_from_input
+
+    # Display extracted results
+    print(f"Location: {location}")
+    print(f"Time: {time.capitalize()}")
+    print(f"Target Date: {target_date.strftime('%A, %d %B %Y')}")
+    print(f"Activity: {activity}")
+
+    # Call weather visualisation
+    if location:
+        create_temperature_visualisation(location)
+    else:
+        print("Please provide a valid location.")
+
+# Example user input
+question = "Will I be able to go running tomorrow in Sydney?"
+location_from_input = "Sydney"
+parse_weather_question(question, location_from_input)
+
+In this code, I added activity detection using regex.
+If the user mentions an activity like "running", "cycling", "swimming", etc., it will be detected.
+You can expand the activity list as needed.
+
+3.	Me I have this code from ChatGPT. Is this a good code?
+import re
+from datetime import datetime, timedelta
+
+def parse_weather_question(question, location_from_input):
+    # Define regex pattern to detect time
+    time_pattern = r"(today|tomorrow|after-tomorrow)"
+
+    # Lists of outdoor and indoor activities
+    outdoor_activities = r"(run|swim|sports|tennis|cycling|hiking|jogging|fishing|camping)"
+    indoor_activities = r"(cooking|reading|studying|watching movies|baking|painting|knitting|gaming)"
+
+    # Search for time in the question
+    time_match = re.search(time_pattern, question, re.IGNORECASE)
+    # Search for an outdoor activity
+    outdoor_match = re.search(outdoor_activities, question, re.IGNORECASE)
+    # Search for an indoor activity
+    indoor_match = re.search(indoor_activities, question, re.IGNORECASE)
+
+    # Default time is "today" if no match found
+    time = "today"
+    activity = None       # Default: no activity detected
+    activity_type = None  # Default: no activity type detected
+
+    if time_match:
+        time = time_match.group(1).lower()  # Get time value (today, tomorrow, after-tomorrow)
+
+    if outdoor_match:
+        activity = outdoor_match.group(1).lower()
+        activity_type = "Outdoor"
+    elif indoor_match:
+        activity = indoor_match.group(1).lower()
+        activity_type = "Indoor"
+
+    # Determine the target date based on the time
+    target_date = datetime.now()
+
+    if time == "tomorrow":
+        target_date += timedelta(days=1)
+    elif time == "after-tomorrow":
+        target_date += timedelta(days=2)
+
+    # Use the location that was previously provided
+    location = location_from_input
+
+    # Display the extracted information
+    print(f"Location: {location}")
+    print(f"Time: {time.capitalize()}")
+    print(f"Target Date: {target_date.strftime('%A, %d %B %Y')}")
+
+    # Display detected activity and its type
+    if activity:
+        print(f"Activity: {activity.capitalize()}")
+        print(f"Activity Type: {activity_type}")
+    else:
+        print("No specific activity mentioned.")
+
+    # Call the function to display weather based on location and date
+    if location:
+        create_temperature_visualisation(location)
+    else:
+        print("Please provide a valid location.")
+Copilot AI said:
+This function is well-structured and effectively extracts time, activity, and location from a user's question. It’s definitely a good approach! However, I see a few areas for improvement:
+✅ Strengths:
+1.	Regex-based extraction: It efficiently detects time and activity from user input.
+2.	Categorization of activities: Differentiating between indoor and outdoor activities is useful.
+3.	Default values: If no time or activity is found, sensible defaults are used (today and None).
+🛠 Possible Improvements:
+1.	Use word boundaries (\b) in regex patterns:
+o	Without \b, words like running may match rerun, which can cause unintended results. Example:
+outdoor_activities = r"\b(run|swim|sports|tennis|cycling|hiking|jogging|fishing|camping)\b"
+indoor_activities = r"\b(cooking|reading|studying|watching movies|baking|painting|knitting|gaming)\b"
+2.	Case Insensitivity for Activity Detection:
+o	You correctly use re.IGNORECASE, but capitalizing the extracted word is more readable:
+activity = outdoor_match.group(1).capitalize() if outdoor_match else indoor_match.group(1).capitalize() if indoor_match else None
+3.	Handling Alternative Time Expressions:
+•	Users might say “day after tomorrow” or variations like “next Tuesday”. Expanding time detection could make it more flexible.
+
+4.	Me: Hey, from that function, I notice that I can't input two activities. How do I input two user activities?
+Copilot AI said:
+Great observation! The current function only captures one activity because it uses re.search(), which finds only the first match. To allow multiple activities, you can modify the function to use re.findall(), which retrieves all matches in a list.
+✅ Updated function to allow multiple activity inputs:
+import re
+from datetime import datetime, timedelta
+
+def parse_weather_question(question, location_from_input):
+    # Define regex pattern to detect time
+    time_pattern = r"(today|tomorrow|after-tomorrow)"
+    
+    # Lists of outdoor and indoor activities (use \b for word boundaries)
+    outdoor_activities = r"\b(run|swim|sports|tennis|cycling|hiking|jogging|fishing|camping)\b"
+    indoor_activities = r"\b(cooking|reading|studying|watching movies|baking|painting|knitting|gaming)\b"
+    
+    # Search for time in the question
+    time_match = re.search(time_pattern, question, re.IGNORECASE)
+    
+    # Find all outdoor and indoor activities
+    outdoor_matches = re.findall(outdoor_activities, question, re.IGNORECASE)
+    indoor_matches = re.findall(indoor_activities, question, re.IGNORECASE)
+
+    # Default time is "today" if no match found
+    time = "today"
+    
+    if time_match:
+        time = time_match.group(1).lower()  # Get the time (today, tomorrow, after-tomorrow)
+    
+    # Combine all detected activities
+    activities = [activity.capitalize() for activity in outdoor_matches + indoor_matches]
+    activity_type = "Outdoor" if outdoor_matches else "Indoor" if indoor_matches else "Unknown"
+
+    # Determine the target date based on the mentioned time
+    target_date = datetime.now()
+
+    if time == "tomorrow":
+        target_date += timedelta(days=1)
+    elif time == "after-tomorrow":
+        target_date += timedelta(days=2)
+
+    # Use the previously provided location
+    location = location_from_input
+
+    # Display the extracted information
+    print(f"Location: {location}")
+    print(f"Time: {time.capitalize()}")
+    print(f"Target Date: {target_date.strftime('%A, %d %B %Y')}")
+
+    # Display all detected activities
+    if activities:
+        print(f"Activities: {', '.join(activities)}")
+        print(f"Activity Type: {activity_type}")
+    else:
+        print("No specific activities mentioned.")
+
+    # Call the function to display weather based on location and date
+    if location:
+        create_temperature_visualisation(location)
+    else:
+        print("Please provide a valid location.")
+
+# Example user input
+question = "Can I go hiking and swimming tomorrow in Sydney?"
+location_from_input = "Sydney"
+parse_weather_question(question, location_from_input)
+
+🔥 Improvements in this version:
+✅ Captures multiple activities using re.findall()
+✅ Capitalizes activities for better readability
+✅ Handles multiple matches without overwriting previous ones
+✅ Determines activity type dynamically
+Now, your function will correctly detect multiple activities from a user input! 🎉 Let me know if you want any refinements! 🚀
+
+***Conversation about error handling for users' input on parse_weather_question*** 
+
+5.	Me: Okay. But what if the user inputs some activities that don't exist in the dictionary? How to do the error-handling?
+Copilot AI said:
+Great question! If a user inputs an activity that isn't in the predefined dictionary, there are several ways to handle it gracefully:
+✅ Error Handling Approaches:
+1.	Allow unknown activities & notify the user
+o	If an activity isn't in the predefined list, acknowledge it but still process the request.
+2.	Suggest closest matches
+o	Use fuzzy matching (difflib.get_close_matches()) to suggest possible activities.
+3.	Ask for clarification
+•	If no matches are found, prompt the user to either confirm or re-enter the activity.
+🔥Improved Code with Error Handling
+import re
+from datetime import datetime, timedelta
+from difflib import get_close_matches
+
+# List of known activities
+known_activities = [
+    "run", "swim", "sports", "tennis", "cycling", "hiking", "jogging", "fishing", "camping",
+    "cooking", "reading", "studying", "watching movies", "baking", "painting", "knitting", "gaming"
+]
+
+def parse_weather_question(question, location_from_input):
+    # Define regex pattern to detect time
+    time_pattern = r"(today|tomorrow|after-tomorrow)"
+    
+    # Search for time in the question
+    time_match = re.search(time_pattern, question, re.IGNORECASE)
+    
+    # Extract all words that might be activities
+    words = re.findall(r"\b\w+\b", question.lower())
+
+    # Find activities that match known activities
+    activities = [word for word in words if word in known_activities]
+    unknown_activities = [word for word in words if word not in known_activities]
+
+    # Default time is "today" if not found
+    time = "today"
+    
+    if time_match:
+        time = time_match.group(1).lower()  # Get the time (today, tomorrow, after-tomorrow)
+
+    # Determine the date based on the mentioned time
+    target_date = datetime.now()
+
+    if time == "tomorrow":
+        target_date += timedelta(days=1)
+    elif time == "after-tomorrow":
+        target_date += timedelta(days=2)
+
+    # Use the location previously provided
+    location = location_from_input
+
+    # Display extracted information
+    print(f"Location: {location}")
+    print(f"Time: {time.capitalize()}")
+    print(f"Target Date: {target_date.strftime('%A, %d %B %Y')}")
+
+    # Display recognized activities
+    if activities:
+        print(f"Activities: {', '.join(activities)}")
+    else:
+        print("No known activities detected.")
+
+    # Handle unrecognized activities
+    if unknown_activities:
+        print(f"Unknown activities: {', '.join(unknown_activities)}")
+
+        # Use fuzzy matching to suggest possible intended activities
+        suggestions = {word: get_close_matches(word, known_activities, n=1) for word in unknown_activities}
+        for word, match in suggestions.items():
+            if match:
+                print(f"Did you mean '{match[0]}' instead of '{word}'?")
+
+    # Call the function to display weather for the given location and date
+    if location:
+        create_temperature_visualisation(location)
+    else:
+        print("Please provide a valid location.")
+
+# Example user input
+question = "Can I go running and moonwalking tomorrow in Sydney?"
+location_from_input = "Sydney"
+parse_weather_question(question, location_from_input)
+
+6.	Me: I notice an error when the user inputs after-tomorrow, such as after tomorrow. So, how to read all users input?
+Copilot AI said:
+Great catch! The issue comes from how re.search() is looking for exact matches of "after-tomorrow", but some users might write "after tomorrow" with a space. To fix this, we can adjust the regex pattern to handle variations like "after tomorrow", "tomorrow after", or "day after tomorrow".
+
+✅ Improved Time Parsing
+Here’s an updated version that makes the time detection more flexible
+import re
+from datetime import datetime, timedelta
+
+def parse_weather_question(question, location_from_input):
+    # Adjusted regex pattern to allow variations
+    time_pattern = r"\b(today|tomorrow|after[- ]tomorrow|day after tomorrow)\b"
+
+    # Search for time expressions
+    time_match = re.search(time_pattern, question, re.IGNORECASE)
+
+    # Default to "today" if no time is found
+    time = "today"
+
+    if time_match:
+        raw_time = time_match.group(0).lower()
+        
+        # Normalize variations
+        if "after" in raw_time:
+            time = "after-tomorrow"
+        elif "tomorrow" in raw_time:
+            time = "tomorrow"
+        else:
+            time = "today"
+
+    # Determine the target date
+    target_date = datetime.now()
+
+    if time == "tomorrow":
+        target_date += timedelta(days=1)
+    elif time == "after-tomorrow":
+        target_date += timedelta(days=2)
+
+    # Display results
+    print(f"Location: {location_from_input}")
+    print(f"Time: {time.capitalize()}")
+    print(f"Target Date: {target_date.strftime('%A, %d %B %Y')}")
+
+# Example input
+question = "Will it rain day after tomorrow in Sydney?"
+location_from_input = "Sydney"
+parse_weather_question(question, location_from_input)
+
+🔥 What’s Improved?
+✅ Handles both "after-tomorrow" and "after tomorrow"
+✅ Supports "day after tomorrow" and other variations
+✅ Avoids errors by normalizing the input before processing
+Now your function will correctly interpret all user inputs related to "after tomorrow"! 🚀 Let me know if you need further tweaks. 😃
+
+7.	Me: Can you make a change in this function?
+if time == "tomorrow":
+    target_date += timedelta(days=1)
+elif time == "after-tomorrow":
+    target_date += timedelta(days=2)
+Copilot AI said:
+Absolutely! If you want a more flexible approach, you could allow users to specify any number of days ahead, rather than just "tomorrow" or "after-tomorrow". Here’s an improved version that reads "in X days" dynamically:
+✅ Updated Code with Flexible Date Handling
+import re
+from datetime import datetime, timedelta
+
+def parse_weather_question(question, location_from_input):
+    # Adjusted regex to handle flexible time expressions
+    time_pattern = r"\b(today|tomorrow|after[- ]tomorrow|day after tomorrow|in (\d+) days)\b"
+
+    # Search for time expressions
+    time_match = re.search(time_pattern, question, re.IGNORECASE)
+
+    # Default to "today" if no time is found
+    time = "today"
+    days_ahead = 0
+
+    if time_match:
+        raw_time = time_match.group(0).lower()
+        days_match = time_match.group(2)  # Capture number of days ahead if provided
+        
+        # Normalize variations
+        if "after" in raw_time:
+            days_ahead = 2
+            time = "after-tomorrow"
+        elif "tomorrow" in raw_time:
+            days_ahead = 1
+            time = "tomorrow"
+        elif days_match:  # If user says "in X days"
+            days_ahead = int(days_match)
+            time = f"in {days_ahead} days"
+        else:
+            time = "today"
+
+    # Determine the target date dynamically
+    target_date = datetime.now() + timedelta(days=days_ahead)
+
+    # Display results
+    print(f"Location: {location_from_input}")
+    print(f"Time: {time.capitalize()}")
+    print(f"Target Date: {target_date.strftime('%A, %d %B %Y')}")
+
+# Example inputs
+questions = [
+    "Will it rain tomorrow in Sydney?",
+    "Will it rain after tomorrow in Sydney?",
+    "Will it rain in 5 days in Sydney?"
+]
+
+location = "Sydney"
+
+for q in questions:
+    print("\nUser Question:", q)
+    parse_weather_question(q, location)
+
+🔥 What’s Improved?
+✅ Handles "in X days" dynamically (e.g., "in 3 days", "in 10 days")
+✅ Supports "after tomorrow" and "day after tomorrow" correctly
+✅ Improves flexibility for different date inputs
+✅ Ensures that any number of days can be read from user input
